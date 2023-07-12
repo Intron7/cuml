@@ -256,8 +256,8 @@ def _cov_sparse(
     Parameters
     ----------
 
-    x : device-array or cupyx.scipy.sparse of size (m, n)
-    y : device-array or cupyx.scipy.sparse of size (m, n)
+    x : cupyx.scipy.sparse of size (m, n)
+    y : cupyx.scipy.sparse of size (m, n)
     mean_x : float (default = None)
         device-array of size (n, ) which is the mean
         of x across rows
