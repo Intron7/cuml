@@ -164,17 +164,6 @@ def cov(x, y, mean_x=None, mean_y=None, return_gram=False, return_mean=False):
             "X and Y must have same shape %s != %s" % (x.shape, y.shape)
         )
 
-    # Fix for cupy issue #7699: addressing problems with sparse matrix multiplication (spGEMM)
-    if cupyx.scipy.sparse.issparse(x) and cupyx.scipy.sparse.issparse(y):
-        return _cov_sparse(
-            x,
-            y,
-            mean_x,
-            mean_y,
-            return_gram=return_gram,
-            return_mean=return_mean,
-        )
-
     if mean_x is not None and mean_y is not None:
         if mean_x.dtype != mean_y.dtype:
             raise ValueError(
@@ -187,6 +176,17 @@ def cov(x, y, mean_x=None, mean_y=None, return_gram=False, return_mean=False):
                 "Mean of X and Mean of Y must have same shape"
                 "%s != %s" % (mean_x.shape, mean_y.shape)
             )
+
+    # Fix for cupy issue #7699: addressing problems with sparse matrix multiplication (spGEMM)
+    if cupyx.scipy.sparse.issparse(x) and cupyx.scipy.sparse.issparse(y):
+        return _cov_sparse(
+            x,
+            y,
+            mean_x,
+            mean_y,
+            return_gram=return_gram,
+            return_mean=return_mean,
+        )
 
     gram_matrix = x.T.dot(y) * (1 / x.shape[0])
 
