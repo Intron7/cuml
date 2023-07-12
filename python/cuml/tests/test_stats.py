@@ -49,13 +49,16 @@ def test_cov(nrows, ncols, sparse, dtype):
 @pytest.mark.parametrize("nrows", [1000])
 @pytest.mark.parametrize("ncols", [500, 1500])
 @pytest.mark.parametrize("dtype", [cp.float32, cp.float64])
-def test_cov_sparse(nrows, ncols, dtype):
+@pytest.mark.parametrize("kernel", ["half", "full"])
+def test_cov_sparse(nrows, ncols, dtype, kernel):
 
     x = cupyx.scipy.sparse.random(
         nrows, ncols, density=0.07, format="csr", dtype=dtype
     )
-    cov_result = _cov_sparse(x, return_mean=True)
-
+    if kernel == "full":
+        cov_result = _cov_sparse(x, x.copy(), return_mean=True)
+    else:
+        cov_result = _cov_sparse(x, x, return_mean=True)
     # check cov
     assert cov_result[0].shape == (ncols, ncols)
 
