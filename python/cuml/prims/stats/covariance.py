@@ -97,9 +97,9 @@ def _cov_kernel_sparse_xx(dtype):
     )
 
 
-def _cov_kernel_sprase(dtype):
+def _cov_kernel_sparse(dtype):
     return cuda_kernel_factory(
-        cov_kernel_str_sparse, (dtype,), "cov_kernel_sprase"
+        cov_kernel_str_sparse, (dtype,), "cov_kernel_sparse"
     )
 
 
@@ -261,7 +261,7 @@ def _cov_sparse(
     mean_x : float (default = None)
         device-array of size (n, ) which is the mean
         of x across rows
-    mean_x : float (default = None)
+    mean_y : float (default = None)
         device-array of size (n, ) which is the mean
         of x across rows
     return_gram : boolean (default = False)
@@ -313,7 +313,7 @@ def _cov_sparse(
         gram_matrix = gram_matrix + gram_matrix.T
 
     else:
-        compute_mean_cov = _cov_kernel_sprase(x.data.dtype)
+        compute_mean_cov = _cov_kernel_sparse(x.data.dtype)
         compute_mean_cov(
             grid,
             block,
